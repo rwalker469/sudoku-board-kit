@@ -69,6 +69,20 @@ console.log(formatValidation(result, { json: true }));
 // {"valid":true,"conflicts":[]}
 ```
 
+Solving works via backtracking with most-constrained-cell ordering, so it
+stays fast even on near-empty boards:
+
+```ts
+import { solveBoard } from "sudoku-board-kit";
+
+const { solved, board: solution } = solveBoard(board);
+if (solved) console.log(formatBoard(solution));
+```
+
+`solveBoard` never mutates its input. If the board already breaks a
+constraint, or has no solution, `solved` is `false` and the returned board
+should be discarded rather than displayed.
+
 When a board breaks a constraint, `validateBoard` reports every conflict it
 finds rather than stopping at the first one:
 
@@ -91,10 +105,12 @@ formatValidation(validateBoard(broken));
   and 3x3 boxes for repeated digits.
 - `formatBoard(board, options?): string` / `formatValidation(result,
   options?): string` — pass `{ json: true }` for machine-readable output.
+- `solveBoard(board: Board): SolveResult` — backtracking solver; returns
+  `{ solved, board }` and never mutates the input.
 
 ## Status
 
-Early. Parsing, validation, and formatting work; there's no solver or
+Early. Parsing, validation, formatting, and solving work; there's no
 generator yet. See the roadmap in the commit history for what's next.
 
 ## License

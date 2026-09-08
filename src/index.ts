@@ -15,3 +15,5 @@ export {
 } from "./board";
 
 export { FormatOptions, formatBoard, formatValidation } from "./format";
+
+export { SolveResult, solveBoard } from "./solve";
