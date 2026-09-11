@@ -83,6 +83,24 @@ if (solved) console.log(formatBoard(solution));
 constraint, or has no solution, `solved` is `false` and the returned board
 should be discarded rather than displayed.
 
+Generating a puzzle fills a random full board and then removes clues one at
+a time, checking after each removal that the puzzle still has exactly one
+solution, until it reaches a clue count for the requested difficulty:
+
+```ts
+import { generateBoard } from "sudoku-board-kit";
+
+const puzzle = generateBoard({ difficulty: "hard" });
+console.log(formatBoard(puzzle));
+```
+
+`difficulty` is one of `"easy"`, `"medium"` (the default), `"hard"`, or
+`"expert"`, mapped to a target clue count. The target is a floor, not a
+guarantee — if removing more clues would make the puzzle ambiguous, the
+generator stops early and returns a board with a few more givens than the
+target. Pass `random` (a `() => number` in `[0, 1)`, matching `Math.random`)
+to get a reproducible sequence of puzzles, e.g. in a test.
+
 When a board breaks a constraint, `validateBoard` reports every conflict it
 finds rather than stopping at the first one:
 
@@ -107,11 +125,15 @@ formatValidation(validateBoard(broken));
   options?): string` — pass `{ json: true }` for machine-readable output.
 - `solveBoard(board: Board): SolveResult` — backtracking solver; returns
   `{ solved, board }` and never mutates the input.
+- `generateBoard(options?: GenerateOptions): Board` — builds a uniquely
+  solvable puzzle; `options.difficulty` picks a target clue count and
+  `options.random` seeds the shuffle.
 
 ## Status
 
-Early. Parsing, validation, formatting, and solving work; there's no
-generator yet. See the roadmap in the commit history for what's next.
+Early. Parsing, validation, formatting, solving, and generation work; there
+are no automated tests yet. See the roadmap in the commit history for what's
+next.
 
 ## License
 

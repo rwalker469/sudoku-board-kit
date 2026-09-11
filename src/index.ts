@@ -17,3 +17,5 @@ export {
 export { FormatOptions, formatBoard, formatValidation } from "./format";
 
 export { SolveResult, solveBoard } from "./solve";
+
+export { Difficulty, GenerateOptions, generateBoard } from "./generate";
