@@ -131,9 +131,10 @@ formatValidation(validateBoard(broken));
 
 ## Status
 
-Early. Parsing, validation, formatting, solving, and generation work; there
-are no automated tests yet. See the roadmap in the commit history for what's
-next.
+Early. Parsing, validation, formatting, solving, and generation work, and
+each has unit tests (`npm test`, which builds and runs them with Node's
+built-in test runner — no test framework dependency). See the roadmap in
+the commit history for what's next.
 
 ## License
 
