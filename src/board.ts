@@ -10,9 +10,11 @@ export function createEmptyBoard(): Board {
 }
 
 // Accepts the common one-line notation: 81 characters, row major,
-// '.' or '0' for blanks, whitespace ignored so pasted grids still parse.
+// '.' or '0' for blanks. Whitespace and the box-drawing characters used by
+// formatBoard's human-readable grid ('|', '+', '-') are stripped first, so
+// pasted grids and formatBoard's own output both parse.
 export function parseBoard(input: string): Board {
-  const chars = input.replace(/\s+/g, "");
+  const chars = input.replace(/[\s|+-]+/g, "");
   if (chars.length !== BOARD_SIZE * BOARD_SIZE) {
     throw new Error(`expected ${BOARD_SIZE * BOARD_SIZE} cells, got ${chars.length}`);
   }

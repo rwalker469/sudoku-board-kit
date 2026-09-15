@@ -114,7 +114,9 @@ formatValidation(validateBoard(broken));
 ## API
 
 - `parseBoard(input: string): Board` — parses an 81-character grid (`.` or
-  `0` for blanks, whitespace ignored).
+  `0` for blanks, whitespace ignored). Also accepts `formatBoard`'s
+  human-readable grid, including its `|`/`+`/`-` box-drawing characters, so
+  output copied from a terminal parses back in.
 - `serializeBoard(board: Board): string` — the inverse of `parseBoard`.
 - `createEmptyBoard(): Board` — a 9x9 grid of blanks.
 - `cloneBoard(board: Board): Board` — a shallow-safe copy.

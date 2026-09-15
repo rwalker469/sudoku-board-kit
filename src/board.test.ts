@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { PUZZLE, SOLUTION } from "./testing/fixtures";
 import { createEmptyBoard, parseBoard, serializeBoard, cloneBoard, isComplete, validateBoard } from "./board";
+import { formatBoard } from "./format";
 
 test("parseBoard reads row-major digits and blanks", () => {
   const board = parseBoard(PUZZLE);
@@ -15,6 +16,19 @@ test("parseBoard ignores whitespace and accepts '0' for blanks", () => {
   const board = parseBoard(spaced);
   assert.strictEqual(board[0][0], 5);
   assert.strictEqual(board[0][2], null);
+});
+
+test("parseBoard accepts a newline-delimited grid", () => {
+  const rows = PUZZLE.match(/.{9}/g) ?? [];
+  const board = parseBoard(rows.join("\n"));
+  assert.strictEqual(board[0][0], 5);
+  assert.strictEqual(board[0][2], null);
+});
+
+test("parseBoard round-trips formatBoard's human-readable grid", () => {
+  const board = parseBoard(PUZZLE);
+  const reparsed = parseBoard(formatBoard(board));
+  assert.deepStrictEqual(reparsed, board);
 });
 
 test("parseBoard rejects the wrong number of cells", () => {
