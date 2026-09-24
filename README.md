@@ -111,6 +111,28 @@ formatValidation(validateBoard(broken));
 //   row 0: digit 1 repeats at (0,0), (0,1)
 ```
 
+Once you have a solution in hand (from `solveBoard`, or your own answer key),
+`diffBoard` compares a puzzle in progress against it, cell by cell. A filled
+cell that disagrees with the solution is a mistake; an empty cell is just a
+blank:
+
+```ts
+import { diffBoard, nextHint } from "sudoku-board-kit";
+
+const { solved, board: solution } = solveBoard(puzzle);
+const { correct, mistakes, blanks } = diffBoard(puzzle, solution);
+```
+
+`nextHint` picks a single cell to point at next: it returns the first
+mistake if there are any (a wrong digit blocks its row, column, and box from
+ever getting the right one), otherwise the first blank, otherwise `null`
+once the board matches the solution.
+
+```ts
+const hint = nextHint(puzzle, solution);
+if (hint) console.log(`try ${hint.expected} at row ${hint.row}, col ${hint.col}`);
+```
+
 ## API
 
 - `parseBoard(input: string): Board` — parses an 81-character grid (`.` or
@@ -130,13 +152,19 @@ formatValidation(validateBoard(broken));
 - `generateBoard(options?: GenerateOptions): Board` — builds a uniquely
   solvable puzzle; `options.difficulty` picks a target clue count and
   `options.random` seeds the shuffle.
+- `diffBoard(board: Board, solution: Board): DiffResult` — compares a board
+  against a fully filled solution, returning `mistakes` (filled cells that
+  disagree) and `blanks` (empty cells), both in row-major order.
+- `nextHint(board: Board, solution: Board): Hint | null` — the next cell
+  worth fixing: a mistake if one exists, otherwise the first blank,
+  otherwise `null`.
 
 ## Status
 
-Early. Parsing, validation, formatting, solving, and generation work, and
-each has unit tests (`npm test`, which builds and runs them with Node's
-built-in test runner — no test framework dependency). See the roadmap in
-the commit history for what's next.
+Early. Parsing, validation, formatting, solving, generation, and diffing
+against a solution work, and each has unit tests (`npm test`, which builds
+and runs them with Node's built-in test runner — no test framework
+dependency). See the roadmap in the commit history for what's next.
 
 ## License
 
